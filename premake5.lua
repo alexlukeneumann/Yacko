@@ -19,7 +19,7 @@ workspace "Engine"
 
     sysincludedirs
     {
-        "imports/thirdparty/fmt/include"
+        "imports/thirdparty/spdlog/include"
     }
 
     filter "system:windows"
@@ -52,9 +52,6 @@ workspace "Engine"
         }
         optimize "on"
         symbols "off"
-
-
-include "imports/thirdparty/fmt"
 
 include "Yacko"
 include "Runtime"

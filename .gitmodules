@@ -1,3 +1,3 @@
-[submodule "imports/thirdparty/fmt"]
-	path = imports/thirdparty/fmt
-	url = https://github.com/alexlukeneumann/fmt
+[submodule "imports/thirdparty/spdlog"]
+	path = imports/thirdparty/spdlog
+	url = https://github.com/alexlukeneumann/spdlog

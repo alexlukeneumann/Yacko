@@ -17,13 +17,3 @@ project "Yacko"
     {
         "src"
     }
-
-    dependson
-    {
-        "fmt"
-    }
-
-    links
-    {
-        "fmt"
-    }
