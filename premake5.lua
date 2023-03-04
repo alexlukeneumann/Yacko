@@ -11,7 +11,7 @@ workspace "Engine"
         "ReleaseVk",
         "DistVk"
     }
-    
+
     debugargs
     {
         "--workingDirectory=$(YACKO_WORKING_DIRECTORY)"
@@ -19,10 +19,7 @@ workspace "Engine"
 
     sysincludedirs
     {
-    }
-
-    syslibdirs
-    {
+        "imports/thirdparty/fmt/include"
     }
 
     filter "system:windows"
@@ -55,6 +52,9 @@ workspace "Engine"
         }
         optimize "on"
         symbols "off"
+
+
+include "imports/thirdparty/fmt"
 
 include "Yacko"
 include "Runtime"

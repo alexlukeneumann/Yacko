@@ -1,9 +1,12 @@
 # include "Common.h"
 
+# include "fmt/format.h"
+
 namespace Yacko
 {
     uint32_t Main( uint32_t argc, char ** argv )
     {
+        fmt::println( "Hello world!" );
         return 0;
     }
 }
