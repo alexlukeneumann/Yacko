@@ -32,7 +32,8 @@ workspace "Yacko"
     filter "configurations:Debug*"
         defines
         {
-            "YK_DEBUG"
+            "YK_DEBUG",
+            "YK_LOGGING"
         }
         optimize "off"
         symbols "on"
@@ -40,7 +41,8 @@ workspace "Yacko"
     filter "configurations:Release*"
         defines
         {
-            "YK_RELEASE"
+            "YK_RELEASE",
+            "YK_LOGGING"
         }
         optimize "on"
         symbols "on"

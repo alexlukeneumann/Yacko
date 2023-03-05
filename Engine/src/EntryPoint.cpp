@@ -1,12 +1,19 @@
 # include "Common.h"
 
-# include <spdlog/spdlog.h>
+# include "Core/Logging.h"
 
 namespace Yk
 {
     uint32_t Main( uint32_t argc, char ** argv )
     {
-        spdlog::info( "Welcome to spdlog!" );
+# if defined( YK_LOGGING )
+        Core::Logger::Init();
+# endif
+
+# if defined( YK_LOGGING )
+        Core::Logger::Shutdown();
+# endif
+
         return 0;
     }
 }
