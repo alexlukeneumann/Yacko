@@ -2,7 +2,7 @@
 
 # include <spdlog/spdlog.h>
 
-namespace Yacko
+namespace Yk
 {
     uint32_t Main( uint32_t argc, char ** argv )
     {
@@ -11,14 +11,14 @@ namespace Yacko
     }
 }
 
-# if defined( YACKO_DIST )
-# if defined( YACKO_PLATFORM_WINDOWS )
+# if defined( YK_DIST )
+# if defined( YK_PLATFORM_WINDOWS )
 
 # include <Windows.h>
 
 int WINAPI WinMain( HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow )
 {
-    return (int)Yacko::Main( __argc, __argv );
+    return (int)Yk::Main( __argc, __argv );
 }
 
 # else
@@ -29,12 +29,12 @@ int WINAPI WinMain( HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmds
 # endif
 
 
-# if defined( YACKO_DEBUG ) | defined( YACKO_RELEASE ) 
-# if defined( YACKO_PLATFORM_WINDOWS )
+# if defined( YK_DEBUG ) | defined( YK_RELEASE ) 
+# if defined( YK_PLATFORM_WINDOWS )
 
 int main( int argc, char ** argv )
 {
-    return (int)Yacko::Main( argc, argv );
+    return (int)Yk::Main( argc, argv );
 }
 
 # else

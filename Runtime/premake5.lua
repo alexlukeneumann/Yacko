@@ -16,17 +16,17 @@ project "Runtime"
     includedirs
     {
         "src",
-        "../yacko/src",
+        "../Engine/src",
     }
 
     dependson
     {
-        "yacko"
+        "Engine"
     }
 
     links
     {
-        "yacko"
+        "Engine"
     }
 
     filter "configurations:Dist*"

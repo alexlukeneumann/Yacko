@@ -1,11 +1,11 @@
 #!lua
 
-project "Yacko"
+project "Engine"
     kind "StaticLib"
     language "C++"
     cppdialect "C++17"
-    targetdir "../bin/Yacko/%{cfg.buildcfg}"
-    objdir "../intermediates/Yacko/%{cfg.buildcfg}"
+    targetdir "../bin/Engine/%{cfg.buildcfg}"
+    objdir "../intermediates/Engine/%{cfg.buildcfg}"
 
     files
     {

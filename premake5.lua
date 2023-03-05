@@ -1,15 +1,15 @@
 #!lua
 
-workspace "Engine"
+workspace "Yacko"
     startproject "Runtime"
     architecture "x64"
     staticruntime "off"
 
     configurations
     {
-        "DebugVk",
-        "ReleaseVk",
-        "DistVk"
+        "Debug",
+        "Release",
+        "Dist"
     }
 
     debugargs
@@ -26,13 +26,13 @@ workspace "Engine"
         systemversion "latest"
         defines
         {
-            "YACKO_PLATFORM_WINDOWS"
+            "YK_PLATFORM_WINDOWS"
         }
 
     filter "configurations:Debug*"
         defines
         {
-            "YACKO_DEBUG"
+            "YK_DEBUG"
         }
         optimize "off"
         symbols "on"
@@ -40,7 +40,7 @@ workspace "Engine"
     filter "configurations:Release*"
         defines
         {
-            "YACKO_RELEASE"
+            "YK_RELEASE"
         }
         optimize "on"
         symbols "on"
@@ -48,10 +48,10 @@ workspace "Engine"
     filter "configurations:Dist*"
         defines
         {
-            "YACKO_DIST"
+            "YK_DIST"
         }
         optimize "on"
         symbols "off"
 
-include "Yacko"
+include "Engine"
 include "Runtime"
