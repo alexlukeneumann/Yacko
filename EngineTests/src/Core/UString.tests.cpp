@@ -231,8 +231,24 @@ namespace Yk::Core::Tests
         EXPECT_EQ( 100, str.Capacity() );
         EXPECT_EQ( 13, str.Length() );
         EXPECT_EQ( UString{ tag0 }, str );
+    }
 
-        str.Reserve( 13 );
+    TEST( UStringTests, CanTrim )
+    {
+        auto tag0 = TEXT( "Hello \u2665 World" );
+        UString str{ tag0 };
+
+        str.Reserve( 99 );
+        ASSERT_EQ( 100, str.Capacity() );
+        ASSERT_EQ( 13, str.Length() );
+        ASSERT_EQ( UString{ tag0 }, str );
+
+        str.Trim();
+        EXPECT_EQ( 14, str.Capacity() );
+        EXPECT_EQ( 13, str.Length() );
+        EXPECT_EQ( UString{ tag0 }, str );
+
+        str.Trim();
         EXPECT_EQ( 14, str.Capacity() );
         EXPECT_EQ( 13, str.Length() );
         EXPECT_EQ( UString{ tag0 }, str );
@@ -245,5 +261,23 @@ namespace Yk::Core::Tests
 
         for( auto i = 0; i < 13; ++i )
             EXPECT_EQ( tag0[ i ], str1[ i ] );
+    }
+
+    TEST( UStringTests, CanResize )
+    {
+        auto tag0 = TEXT( "Hello \u2665 World" );
+        UString str{ tag0 };
+
+        str.Resize( 20, 't' );
+        EXPECT_EQ( UString{ TEXT( "Hello \u2665 Worldttttttt" ) }, str );
+
+        str.Resize( 13 );
+        EXPECT_EQ( UString{ tag0 }, str );
+
+        str.Resize( 5 );
+        EXPECT_EQ( UString{ TEXT( "Hello" ) }, str );
+
+        str.Resize( 10 );
+        EXPECT_EQ( 0, memcmp( TEXT( "Hello\0\0\0\0\0" ), str.CStr(), str.Length() ) );
     }
 }

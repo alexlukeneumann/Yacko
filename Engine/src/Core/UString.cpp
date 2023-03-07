@@ -300,7 +300,7 @@ namespace Yk::Core
 
     void UString::Reserve( uint64_t length )
     {
-        if( length < m_Length )
+        if( length < m_Capacity )
             return;
 
         m_Capacity = length + 1; // +1 for '\0'
@@ -310,5 +310,34 @@ namespace Yk::Core
 
         delete[] m_Buf;
         m_Buf = buf;
+    }
+
+    void UString::Resize( uint64_t length, char16_t c )
+    {
+        if( length == m_Length && ( m_Length + 1 ) == m_Capacity )
+            return;
+
+        if( length > m_Length )
+        {
+            Reserve( length );
+
+            auto p{ m_Buf + m_Length };
+            auto count = length - m_Length;
+            while( count-- )
+                *p++ = c;
+        }
+        else
+        {
+            m_Capacity = length + 1; // +1 for '\0'
+            auto buf{ new char16_t[ m_Capacity ] };
+            memcpy( buf, m_Buf, length * sizeof( char16_t ) );
+            buf[ length ] = u'\0';
+
+            delete[] m_Buf;
+            m_Buf = buf;
+        }
+
+        m_Length = length;
+        m_MultiByteCache.m_Dirty = true;
     }
 }

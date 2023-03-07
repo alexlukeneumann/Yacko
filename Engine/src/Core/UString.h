@@ -49,6 +49,7 @@ namespace Yk::Core
         UString SubStr( uint64_t pos, uint64_t length = UString::NPOS ) const;
 
         void Reserve( uint64_t length );
+        void Resize( uint64_t length, char16_t c = '\0' );
 
         inline bool Contains( const char16_t * tag, uint64_t pos = 0 ) const { return Find( tag, pos ) != UString::NPOS; }
         constexpr bool Empty() const { return m_Length == 0; }
