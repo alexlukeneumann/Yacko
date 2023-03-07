@@ -280,10 +280,30 @@ namespace Yk::Core
             if( tagLen > ( m_Length - ( p - m_Buf )))
                 break;
 
-            if( memcmp( p, tag, tagLen ) == 0 )
+            if( memcmp( p, tag, tagLen * sizeof( char16_t ) ) == 0 )
                 return static_cast<uint64_t>( p - m_Buf );
 
             ++p;
+        }
+
+        return UString::NPOS;
+    }
+
+    uint64_t UString::FindLastOf( const char16_t * tag, uint64_t pos ) const
+    {
+        if( pos != UString::NPOS && pos > m_Length )
+            return UString::NPOS;
+
+        const auto tagLen{ Helpers::StrLen( tag ) };
+
+        auto p{ m_Buf + std::min( pos, m_Length - tagLen ) };
+        uint64_t count{ static_cast<uint64_t>( p - m_Buf ) };
+        while( count )
+        {
+            if( memcmp( p--, tag, tagLen * sizeof( char16_t ) ) == 0 )
+                return count;
+
+            --count;
         }
 
         return UString::NPOS;

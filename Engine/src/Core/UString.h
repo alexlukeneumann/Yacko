@@ -46,6 +46,7 @@ namespace Yk::Core
         UString & ToLower();
         UString & ToUpper();
         uint64_t Find( const char16_t * tag, uint64_t pos = 0 ) const;
+        uint64_t FindLastOf( const char16_t * tag, uint64_t pos = UString::NPOS ) const;
         UString SubStr( uint64_t pos, uint64_t length = UString::NPOS ) const;
 
         void Reserve( uint64_t length );

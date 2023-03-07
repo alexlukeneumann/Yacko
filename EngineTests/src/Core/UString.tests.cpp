@@ -176,6 +176,18 @@ namespace Yk::Core::Tests
         EXPECT_EQ( UString::NPOS, str.Find( tag1, str.Length() ) );
     }
 
+    TEST( UStringTests, CanFindLastOf )
+    {
+        auto tag0 = TEXT( "Hello \u2665 World" );
+        auto tag1 = TEXT( "ld" );
+
+        const UString str{ tag0 };
+        EXPECT_EQ( 11, str.FindLastOf( tag1 ));
+        EXPECT_EQ( 11, str.FindLastOf( tag1, str.Length() ) );
+        EXPECT_EQ( 11, str.FindLastOf( tag1, 11 ) );
+        EXPECT_EQ( UString::NPOS, str.FindLastOf( tag1, 10 ) );
+    }
+
     TEST( UStringTests, ContainsCorrectlyWorks )
     {
         auto tag0 = TEXT( "Hello \u2665 World" );
