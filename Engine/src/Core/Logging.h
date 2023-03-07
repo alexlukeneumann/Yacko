@@ -55,6 +55,8 @@ namespace Yk::Core
     }
 }
 
+# define YK_LOGGING_INIT()          Yk::Core::Logger::Init();
+# define YK_LOGGING_SHUTDOWN()      Yk::Core::Logger::Shutdown();
 # define YK_ENGINE_TRACE( ... )     Yk::Core::Logger::LogMessage( Yk::Core::Logger::Level::Trace, __VA_ARGS__ );
 # define YK_ENGINE_INFO( ... )      Yk::Core::Logger::LogMessage( Yk::Core::Logger::Level::Info, __VA_ARGS__ );
 # define YK_ENGINE_WARN( ... )      Yk::Core::Logger::LogMessage( Yk::Core::Logger::Level::Warn, __VA_ARGS__ );
@@ -63,6 +65,8 @@ namespace Yk::Core
 
 # else 
 
+# define YK_LOGGING_INIT()
+# define YK_LOGGING_SHUTDOWN()
 # define YK_ENGINE_TRACE( ... )
 # define YK_ENGINE_INFO( ... )
 # define YK_ENGINE_WARN( ... )

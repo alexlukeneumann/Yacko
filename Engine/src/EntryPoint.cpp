@@ -1,19 +1,11 @@
-# include "Common.h"
-
 # include "Core/Logging.h"
 
 namespace Yk
 {
     uint32_t Main( uint32_t argc, char ** argv )
     {
-# if defined( YK_LOGGING )
-        Core::Logger::Init();
-# endif
-
-# if defined( YK_LOGGING )
-        Core::Logger::Shutdown();
-# endif
-
+        YK_LOGGING_INIT();
+        YK_LOGGING_SHUTDOWN();
         return 0;
     }
 }
