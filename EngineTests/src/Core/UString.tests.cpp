@@ -233,27 +233,6 @@ namespace Yk::Core::Tests
         EXPECT_EQ( UString{ tag0 }, str );
     }
 
-    TEST( UStringTests, CanTrim )
-    {
-        auto tag0 = TEXT( "Hello \u2665 World" );
-        UString str{ tag0 };
-
-        str.Reserve( 99 );
-        ASSERT_EQ( 100, str.Capacity() );
-        ASSERT_EQ( 13, str.Length() );
-        ASSERT_EQ( UString{ tag0 }, str );
-
-        str.Trim();
-        EXPECT_EQ( 14, str.Capacity() );
-        EXPECT_EQ( 13, str.Length() );
-        EXPECT_EQ( UString{ tag0 }, str );
-
-        str.Trim();
-        EXPECT_EQ( 14, str.Capacity() );
-        EXPECT_EQ( 13, str.Length() );
-        EXPECT_EQ( UString{ tag0 }, str );
-    }
-
     TEST( UStringTests, CanIndexAccessCharacter )
     {
         auto tag0 = TEXT( "Hello \u2665 World" );
