@@ -16,7 +16,7 @@ namespace Yk::Core::Tests
 
     TEST( UStringTests, CanConstructFromUTF16Str )
     {
-        auto tag = TEXT( "Hello \u2665 World" );
+        auto tag = YK_TXT( "Hello \u2665 World" );
         const UString str{ tag };
 
         EXPECT_EQ( 13, str.Length() );
@@ -31,12 +31,12 @@ namespace Yk::Core::Tests
 
         EXPECT_EQ( 11, str.Length() );
         EXPECT_EQ( 12, str.Capacity() );
-        EXPECT_EQ( 0, memcmp( TEXT( "Hello World" ), str.CStr(), str.Length() * sizeof( char16_t )));
+        EXPECT_EQ( 0, memcmp( YK_TXT( "Hello World" ), str.CStr(), str.Length() * sizeof( char16_t )));
     }
 
     TEST( UStringTests, CanCopyConstruct )
     {
-        auto tag = TEXT( "Hello \u2665 World" );
+        auto tag = YK_TXT( "Hello \u2665 World" );
         const UString str0{ tag };
         const UString str1{ str0 };
 
@@ -47,7 +47,7 @@ namespace Yk::Core::Tests
 
     TEST( UStringTests, CanMoveConstruct )
     {
-        auto tag = TEXT( "Hello \u2665 World" );
+        auto tag = YK_TXT( "Hello \u2665 World" );
         
         UString str0{ tag };
         str0.ToMultiByte();
@@ -67,7 +67,7 @@ namespace Yk::Core::Tests
 
     TEST( UStringTests, CanCopyAssign )
     {
-        auto tag = TEXT( "Hello \u2665 World" );
+        auto tag = YK_TXT( "Hello \u2665 World" );
 
         const UString str0{ tag };
         UString str1;
@@ -80,7 +80,7 @@ namespace Yk::Core::Tests
 
     TEST( UStringTests, CanMoveAssign )
     {
-        auto tag = TEXT( "Hello \u2665 World" );
+        auto tag = YK_TXT( "Hello \u2665 World" );
 
         UString str0{ tag };
         UString str1;
@@ -99,7 +99,7 @@ namespace Yk::Core::Tests
 
     TEST( UStringTests, CanConvertToMultiByteString )
     {
-        auto tag = TEXT( "Hello \u2665 World" );
+        auto tag = YK_TXT( "Hello \u2665 World" );
         const UString str{ tag };
 
         auto mbStr{ str.ToMultiByte() };
@@ -114,7 +114,7 @@ namespace Yk::Core::Tests
 
     TEST( UStringTests, CanConvertToMultiByteStringAndBack )
     {
-        auto tag = TEXT( "Hello \u2665 World" );
+        auto tag = YK_TXT( "Hello \u2665 World" );
         const UString str0{ tag };
 
         auto mbTag{ str0.ToMultiByte() };
@@ -127,8 +127,8 @@ namespace Yk::Core::Tests
 
     TEST( UStringTests, EqualityOperators )
     {
-        auto tag0 = TEXT( "Hello \u2665 World" );
-        auto tag1 = TEXT( "Hello World \u2665" );
+        auto tag0 = YK_TXT( "Hello \u2665 World" );
+        auto tag1 = YK_TXT( "Hello World \u2665" );
 
         EXPECT_EQ( UString{}, UString{} );
         EXPECT_NE( UString{ tag0 }, UString{} );
@@ -138,8 +138,8 @@ namespace Yk::Core::Tests
 
     TEST( UStringTests, CanToLower )
     {
-        auto tag0 = TEXT( "HeLlO \u2665 WorLd" );
-        auto tag1 = TEXT( "hello \u2665 world" );
+        auto tag0 = YK_TXT( "HeLlO \u2665 WorLd" );
+        auto tag1 = YK_TXT( "hello \u2665 world" );
         auto tag2 = "hello ♥ world";
 
         UString str{ tag0 };
@@ -151,8 +151,8 @@ namespace Yk::Core::Tests
 
     TEST( UStringTests, CanToUpper )
     {
-        auto tag0 = TEXT( "HeLlO \u2665 WorLd" );
-        auto tag1 = TEXT( "HELLO \u2665 WORLD" );
+        auto tag0 = YK_TXT( "HeLlO \u2665 WorLd" );
+        auto tag1 = YK_TXT( "HELLO \u2665 WORLD" );
         auto tag2 = "HELLO ♥ WORLD";
 
         UString str{ tag0 };
@@ -164,9 +164,9 @@ namespace Yk::Core::Tests
 
     TEST( UStringTests, CanFind )
     {
-        auto tag0 = TEXT( "Hello \u2665 World" );
-        auto tag1 = TEXT( "\u2665 Wor" );
-        auto tag2 = TEXT( "Hello \u2665 World 123" );
+        auto tag0 = YK_TXT( "Hello \u2665 World" );
+        auto tag1 = YK_TXT( "\u2665 Wor" );
+        auto tag2 = YK_TXT( "Hello \u2665 World 123" );
 
         const UString str{ tag0 };
         EXPECT_EQ( 6, str.Find( tag1 ) );
@@ -187,9 +187,9 @@ namespace Yk::Core::Tests
 
     TEST( UStringTests, CanFindLastOf )
     {
-        auto tag0 = TEXT( "Hello \u2665 World" );
-        auto tag1 = TEXT( "\u2665 Wor" );
-        auto tag2 = TEXT( "Hello \u2665 World 123" );
+        auto tag0 = YK_TXT( "Hello \u2665 World" );
+        auto tag1 = YK_TXT( "\u2665 Wor" );
+        auto tag2 = YK_TXT( "Hello \u2665 World 123" );
 
         const UString str{ tag0 };
         EXPECT_EQ( 6, str.FindLastOf( tag1 ));
@@ -209,8 +209,8 @@ namespace Yk::Core::Tests
 
     TEST( UStringTests, ContainsCorrectlyWorks )
     {
-        auto tag0 = TEXT( "Hello \u2665 World" );
-        auto tag1 = TEXT( "\u2665 Wor" );
+        auto tag0 = YK_TXT( "Hello \u2665 World" );
+        auto tag1 = YK_TXT( "\u2665 Wor" );
 
         const UString str{ tag0 };
         EXPECT_TRUE( str.Contains( tag1 ) );
@@ -223,26 +223,26 @@ namespace Yk::Core::Tests
 
     TEST( UStringTests, CanSubStr )
     {
-        auto tag0 = TEXT( "Hello \u2665 World" );
+        auto tag0 = YK_TXT( "Hello \u2665 World" );
         const UString str{ tag0 };
 
         EXPECT_EQ( UString{ tag0 }, str.SubStr( 0 ));
         EXPECT_EQ( UString{ tag0 }, str.SubStr( 0, str.Length() ));
         EXPECT_EQ( UString{ tag0 }, str.SubStr( 0, str.Length() + 10 ));
-        EXPECT_EQ( UString{ TEXT( "Hello" ) }, str.SubStr( 0, 5 ));
-        EXPECT_EQ( UString{ TEXT( "\u2665 World" ) }, str.SubStr( 6 ));
+        EXPECT_EQ( UString{ YK_TXT( "Hello" ) }, str.SubStr( 0, 5 ));
+        EXPECT_EQ( UString{ YK_TXT( "\u2665 World" ) }, str.SubStr( 6 ));
         EXPECT_EQ( UString{}, str.SubStr( str.Length() ));
-        EXPECT_EQ( UString{ TEXT( "d" )}, str.SubStr( str.Length() - 1 ));
+        EXPECT_EQ( UString{ YK_TXT( "d" )}, str.SubStr( str.Length() - 1 ));
     }
 
     TEST( UStringTests, CanAppend )
     {
-        auto tag0 = TEXT( "Hello" );
-        auto tag1 = TEXT( "Hello \u2665 World" );
+        auto tag0 = YK_TXT( "Hello" );
+        auto tag1 = YK_TXT( "Hello \u2665 World" );
         UString str{ tag0 };
 
-        str.Append( TEXT( " \u2665 " ) );
-        str += TEXT( "World" );
+        str.Append( YK_TXT( " \u2665 " ) );
+        str += YK_TXT( "World" );
 
         EXPECT_EQ( UString{ tag1 }, str );
         EXPECT_EQ( 0, memcmp( "Hello ♥ World", str.ToMultiByte(), 15 ));
@@ -250,7 +250,7 @@ namespace Yk::Core::Tests
 
     TEST( UStringTests, CanReserve )
     {
-        auto tag0 = TEXT( "Hello \u2665 World" );
+        auto tag0 = YK_TXT( "Hello \u2665 World" );
         UString str{ tag0 };
 
         str.Reserve( 99 );
@@ -266,7 +266,7 @@ namespace Yk::Core::Tests
 
     TEST( UStringTests, CanIndexAccessCharacter )
     {
-        auto tag0 = TEXT( "Hello \u2665 World" );
+        auto tag0 = YK_TXT( "Hello \u2665 World" );
         const UString str1{ tag0 };
 
         for( auto i = 0; i < 13; ++i )
@@ -275,21 +275,21 @@ namespace Yk::Core::Tests
 
     TEST( UStringTests, CanResize )
     {
-        auto tag0 = TEXT( "Hello \u2665 World" );
+        auto tag0 = YK_TXT( "Hello \u2665 World" );
         UString str{ tag0 };
 
         str.Resize( 20, 't' );
-        EXPECT_EQ( UString{ TEXT( "Hello \u2665 Worldttttttt" ) }, str );
+        EXPECT_EQ( UString{ YK_TXT( "Hello \u2665 Worldttttttt" ) }, str );
         EXPECT_EQ( 0, memcmp( "Hello ♥ Worldttttttt", str.ToMultiByte(), 23 ) );
 
         str.Resize( 13 );
         EXPECT_EQ( UString{ tag0 }, str );
 
         str.Resize( 5 );
-        EXPECT_EQ( UString{ TEXT( "Hello" ) }, str );
+        EXPECT_EQ( UString{ YK_TXT( "Hello" ) }, str );
 
         str.Resize( 10 );
-        EXPECT_EQ( 0, memcmp( TEXT( "Hello\0\0\0\0\0" ), str.CStr(), str.Length() ) );
+        EXPECT_EQ( 0, memcmp( YK_TXT( "Hello\0\0\0\0\0" ), str.CStr(), str.Length() ) );
         EXPECT_EQ( 0, memcmp( "Hello\0", str.ToMultiByte(), 6 ) );
     }
 }

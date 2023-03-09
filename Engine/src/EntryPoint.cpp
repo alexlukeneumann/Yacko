@@ -1,10 +1,12 @@
 # include "Core/Logging.h"
+# include "Core/UString.h"
 
 # include <cstdint>
+# include <vector>
 
 namespace Yk
 {
-    uint32_t Main( uint32_t argc, char ** argv )
+    uint32_t Main( const std::vector<Core::UString> & args )
     {
         YK_LOGGING_INIT();
         YK_LOGGING_SHUTDOWN();
@@ -12,35 +14,38 @@ namespace Yk
     }
 }
 
-# if defined( YK_DIST )
 # if defined( YK_PLATFORM_WINDOWS )
 
-# include <Windows.h>
+# define WIN32_LEAN_AND_MEAN
+# include <windows.h>
+# include <shellapi.h>
 
 int WINAPI WinMain( HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow )
 {
-    return static_cast<uint32_t>( Yk::Main( __argc, __argv ) );
+# if !defined( YK_DIST )
+    YK_ENGINE_ASSERT( AllocConsole() );
+# endif
+
+    int32_t argc = 0;
+    wchar_t ** argv = CommandLineToArgvW( GetCommandLineW(), &argc );
+
+    std::vector<Yk::Core::UString> args;
+    args.reserve( argc );
+
+    for( auto i = 0; i < argc; ++i )
+        args.emplace_back( argv[ i ] );
+
+    const auto rc = Yk::Main( args );
+
+# if !defined( YK_DIST )
+    YK_ENGINE_ASSERT( FreeConsole() );
+# endif
+
+    return rc;
 }
 
 # else
 
 # error Platform not supported!
 
-# endif
-# endif
-
-
-# if defined( YK_DEBUG ) | defined( YK_RELEASE ) 
-# if defined( YK_PLATFORM_WINDOWS )
-
-int main( int argc, char ** argv )
-{
-    return static_cast<uint32_t>( Yk::Main( argc, argv ) );
-}
-
-# else
-
-# error Platform not supported!
-
-# endif
 # endif

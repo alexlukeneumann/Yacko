@@ -1,7 +1,7 @@
 #!lua
 
 project "Runtime"
-    kind "ConsoleApp"
+    kind "WindowedApp"
     language "C++"
     cppdialect "C++17"
     targetdir "../bin/Runtime/%{cfg.buildcfg}"
@@ -28,6 +28,3 @@ project "Runtime"
     {
         "Engine"
     }
-
-    filter "configurations:Dist*"
-        kind "WindowedApp"

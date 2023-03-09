@@ -79,7 +79,7 @@ namespace Yk::Core
                 if( res > 0 && res != c_InvalidRes )
                 {
                     memcpy( tmpBuf + tmpLength, out, res );
-                    tmpLength += static_cast<uint64_t>( res );
+                    tmpLength += res;
                 }
             }
 
@@ -155,6 +155,28 @@ namespace Yk::Core
         m_Buf = Helpers::MultiByteToUTF16( tag, m_Capacity, m_Length );
         m_MultiByteCache.m_Dirty = true;
     }
+
+# if defined( YK_PLATFORM_WINDOWS )
+    UString::UString( const wchar_t * tag )
+        : m_Buf{ nullptr }
+        , m_Length{ 0 }
+        , m_Capacity{ 0 }
+        , m_MultiByteCache{}
+    {
+        if( !tag )
+            return;
+
+        YK_ENGINE_VERIFY( sizeof( char16_t ) == sizeof( wchar_t ) );
+
+        m_Length = Helpers::StrLen( tag );
+        m_Capacity = m_Length + 1;
+        m_Buf = new char16_t[ m_Capacity ];
+        memcpy( m_Buf, tag, m_Capacity * sizeof( char16_t ) );
+        m_Buf[ m_Length ] = u'\0';
+
+        m_MultiByteCache.m_Dirty = true;
+    }
+# endif
 
     UString::~UString()
     {
@@ -269,14 +291,14 @@ namespace Yk::Core
             return UString::NPOS;
 
         auto p{ m_Buf + pos };
-        uint64_t count{ static_cast<uint64_t>( m_Buf + m_Length - p ) - tagLen + 1 };
+        uint64_t count{ ( m_Buf + m_Length - p ) - tagLen + 1 };
 
         bool found = false;
         while( count-- && !found )
             found = memcmp( p++, tag, tagLen * sizeof( char16_t ) ) == 0;
 
         return found
-            ? static_cast<uint64_t>( p - m_Buf - 1 ) // 'p' is ahead by one
+            ? p - m_Buf - 1 // 'p' is ahead by one
             : UString::NPOS;
     }
 
@@ -291,14 +313,14 @@ namespace Yk::Core
             return UString::NPOS;
 
         auto p{ m_Buf + std::min( pos, m_Length - tagLen ) };
-        uint64_t count{ static_cast<uint64_t>( p - m_Buf ) + 1 };
+        uint64_t count{ ( p - m_Buf ) + 1llu };
         
         bool found = false;
         while( count-- && !found )
             found = memcmp( p--, tag, tagLen * sizeof( char16_t ) ) == 0;
 
         return found
-            ? static_cast<uint64_t>( p - m_Buf + 1 ) // 'p' is behind by one
+            ? p - m_Buf + 1 // 'p' is behind by one
             : UString::NPOS;
     }
 
