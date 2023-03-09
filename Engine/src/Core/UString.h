@@ -25,6 +25,9 @@ namespace Yk::Core
         UString( const char16_t * tag );
         UString( const char16_t * tag, uint64_t length );
         UString( const std::string_view & tag );
+# if defined( YK_PLATFORM_WINDOWS )
+        UString( const wchar_t * tag );
+# endif
         ~UString();
 
         UString & operator = ( const UString & other );
@@ -134,10 +137,6 @@ namespace Yk::Core
         return *( m_Buf + pos );
     }
 
-# if defined( TEXT )
-# undef TEXT
-# endif
-
-# define TEXT( tag ) u##tag
+# define YK_TXT( tag ) u##tag
 
 }
