@@ -9,7 +9,7 @@
 namespace Yk::Core::Internal
 {
     template <typename... Args>
-    constexpr void HandleAssert(
+    constexpr void HandleEngineAssert(
         bool assert,
         const char * conditionStr,
         uint32_t lineNumber,
@@ -37,7 +37,7 @@ namespace Yk::Core::Internal
     }
 
     template <typename... Args>
-    constexpr void HandleVerify(
+    constexpr void HandleEngineVerify(
         bool verify,
         const char * conditionStr,
         uint32_t lineNumber,
@@ -75,7 +75,7 @@ namespace Yk::Core::Internal
     paused on the assert to allow the developer to inspect the error. This is a non-fatal
     assert allowing the developer/user to ignore the assert.
 */
-# define YK_ENGINE_ASSERT( condition, ... ) Yk::Core::Internal::HandleAssert( !( condition ), #condition, __LINE__, __FUNCSIG__, __FILE__, __VA_ARGS__ );
+# define YK_ENGINE_ASSERT( condition, ... ) Yk::Core::Internal::HandleEngineAssert( !( condition ), #condition, __LINE__, __FUNCSIG__, __FILE__, __VA_ARGS__ );
 
 /*
     YK_ENGINE_VERIFY( condition, ... )
@@ -86,7 +86,7 @@ namespace Yk::Core::Internal
     assert to allow the developer to inspect the error. This is a fatal assert and is
     non-skippable; the application will terminate.
 */
-# define YK_ENGINE_VERIFY( condition, ... ) Yk::Core::Internal::HandleVerify( !( condition ), #condition, __LINE__, __FUNCSIG__, __FILE__, __VA_ARGS__ );
+# define YK_ENGINE_VERIFY( condition, ... ) Yk::Core::Internal::HandleEngineVerify( !( condition ), #condition, __LINE__, __FUNCSIG__, __FILE__, __VA_ARGS__ );
 
 # else
 
