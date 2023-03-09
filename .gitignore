@@ -6,3 +6,4 @@ intermediates/
 **.vcxproj.filters
 **.vcxproj.user
 !**premake5.lua
+**.log
