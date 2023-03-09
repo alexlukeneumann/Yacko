@@ -12,6 +12,13 @@ namespace Yk::Core
     class Logger
     {
     public:
+        enum class Type : uint8_t
+        {
+            Engine,
+            Editor,
+            Client
+        };
+
         enum class Level : uint8_t
         {
             Trace = 0,
@@ -25,31 +32,48 @@ namespace Yk::Core
         static void Shutdown();
 
         template <typename... Args>
-        static void LogMessage( Level level, Args &&... args );
+        static void LogMessage( Type type, Level level, Args &&... args );
 
     private:
         static std::shared_ptr<spdlog::logger> s_EngineLogger;
+        static std::shared_ptr<spdlog::logger> s_EditorLogger;
+        static std::shared_ptr<spdlog::logger> s_ClientLogger;
     };
 
     template <typename... Args>
-    void Logger::LogMessage( Logger::Level level, Args &&... args )
+    void Logger::LogMessage( Type type, Logger::Level level, Args &&... args )
     {
+        std::shared_ptr<spdlog::logger> logger = nullptr;
+
+        switch( type )
+        {
+        case Type::Engine:
+            logger = s_EngineLogger;
+            break;
+        case Type::Editor:
+            logger = s_EditorLogger;
+            break;
+        case Type::Client:
+            logger = s_ClientLogger;
+            break;
+        }
+
         switch( level )
         {
         case Level::Trace:
-            s_EngineLogger->trace( fmt::format( std::forward<Args>( args )... ));
+            logger->trace( fmt::format( std::forward<Args>( args )... ));
             break;
         case Level::Info:
-            s_EngineLogger->info( fmt::format( std::forward<Args>( args )... ));
+            logger->info( fmt::format( std::forward<Args>( args )... ));
             break;
         case Level::Warn:
-            s_EngineLogger->warn( fmt::format( std::forward<Args>( args )... ));
+            logger->warn( fmt::format( std::forward<Args>( args )... ));
             break;
         case Level::Error:
-            s_EngineLogger->error( fmt::format( std::forward<Args>( args )... ));
+            logger->error( fmt::format( std::forward<Args>( args )... ));
             break;
         case Level::Critical:
-            s_EngineLogger->critical( fmt::format( std::forward<Args>( args )... ));
+            logger->critical( fmt::format( std::forward<Args>( args )... ));
             break;
         }
     }
@@ -57,20 +81,46 @@ namespace Yk::Core
 
 # define YK_LOGGING_INIT()          Yk::Core::Logger::Init();
 # define YK_LOGGING_SHUTDOWN()      Yk::Core::Logger::Shutdown();
-# define YK_ENGINE_TRACE( ... )     Yk::Core::Logger::LogMessage( Yk::Core::Logger::Level::Trace, __VA_ARGS__ );
-# define YK_ENGINE_INFO( ... )      Yk::Core::Logger::LogMessage( Yk::Core::Logger::Level::Info, __VA_ARGS__ );
-# define YK_ENGINE_WARN( ... )      Yk::Core::Logger::LogMessage( Yk::Core::Logger::Level::Warn, __VA_ARGS__ );
-# define YK_ENGINE_ERROR( ... )     Yk::Core::Logger::LogMessage( Yk::Core::Logger::Level::Error, __VA_ARGS__ );
-# define YK_ENGINE_CRITICAL( ... )  Yk::Core::Logger::LogMessage( Yk::Core::Logger::Level::Critical, __VA_ARGS__ );
+
+# define YK_ENGINE_TRACE( ... )     Yk::Core::Logger::LogMessage( Yk::Core::Logger::Type::Engine, Yk::Core::Logger::Level::Trace, __VA_ARGS__ );
+# define YK_ENGINE_INFO( ... )      Yk::Core::Logger::LogMessage( Yk::Core::Logger::Type::Engine, Yk::Core::Logger::Level::Info, __VA_ARGS__ );
+# define YK_ENGINE_WARN( ... )      Yk::Core::Logger::LogMessage( Yk::Core::Logger::Type::Engine, Yk::Core::Logger::Level::Warn, __VA_ARGS__ );
+# define YK_ENGINE_ERROR( ... )     Yk::Core::Logger::LogMessage( Yk::Core::Logger::Type::Engine, Yk::Core::Logger::Level::Error, __VA_ARGS__ );
+# define YK_ENGINE_CRITICAL( ... )  Yk::Core::Logger::LogMessage( Yk::Core::Logger::Type::Engine, Yk::Core::Logger::Level::Critical, __VA_ARGS__ );
+
+# define YK_EDITOR_TRACE( ... )     Yk::Core::Logger::LogMessage( Yk::Core::Logger::Type::Editor, Yk::Core::Logger::Level::Trace, __VA_ARGS__ );
+# define YK_EDITOR_INFO( ... )      Yk::Core::Logger::LogMessage( Yk::Core::Logger::Type::Editor, Yk::Core::Logger::Level::Info, __VA_ARGS__ );
+# define YK_EDITOR_WARN( ... )      Yk::Core::Logger::LogMessage( Yk::Core::Logger::Type::Editor, Yk::Core::Logger::Level::Warn, __VA_ARGS__ );
+# define YK_EDITOR_ERROR( ... )     Yk::Core::Logger::LogMessage( Yk::Core::Logger::Type::Editor, Yk::Core::Logger::Level::Error, __VA_ARGS__ );
+# define YK_EDITOR_CRITICAL( ... )  Yk::Core::Logger::LogMessage( Yk::Core::Logger::Type::Editor, Yk::Core::Logger::Level::Critical, __VA_ARGS__ );
+
+# define YK_CLIENT_TRACE( ... )     Yk::Core::Logger::LogMessage( Yk::Core::Logger::Type::Client, Yk::Core::Logger::Level::Trace, __VA_ARGS__ );
+# define YK_CLIENT_INFO( ... )      Yk::Core::Logger::LogMessage( Yk::Core::Logger::Type::Client, Yk::Core::Logger::Level::Info, __VA_ARGS__ );
+# define YK_CLIENT_WARN( ... )      Yk::Core::Logger::LogMessage( Yk::Core::Logger::Type::Client, Yk::Core::Logger::Level::Warn, __VA_ARGS__ );
+# define YK_CLIENT_ERROR( ... )     Yk::Core::Logger::LogMessage( Yk::Core::Logger::Type::Client, Yk::Core::Logger::Level::Error, __VA_ARGS__ );
+# define YK_CLIENT_CRITICAL( ... )  Yk::Core::Logger::LogMessage( Yk::Core::Logger::Type::Client, Yk::Core::Logger::Level::Critical, __VA_ARGS__ );
 
 # else 
 
 # define YK_LOGGING_INIT()
 # define YK_LOGGING_SHUTDOWN()
+
 # define YK_ENGINE_TRACE( ... )
 # define YK_ENGINE_INFO( ... )
 # define YK_ENGINE_WARN( ... )
 # define YK_ENGINE_ERROR( ... )
 # define YK_ENGINE_CRITICAL( ... )
+
+# define YK_EDITOR_TRACE( ... )
+# define YK_EDITOR_INFO( ... )
+# define YK_EDITOR_WARN( ... )
+# define YK_EDITOR_ERROR( ... )
+# define YK_EDITOR_CRITICAL( ... )
+
+# define YK_CLIENT_TRACE( ... )
+# define YK_CLIENT_INFO( ... )
+# define YK_CLIENT_WARN( ... )
+# define YK_CLIENT_ERROR( ... )
+# define YK_CLIENT_CRITICAL( ... )
 
 # endif
