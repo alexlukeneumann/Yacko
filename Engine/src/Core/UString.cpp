@@ -223,20 +223,11 @@ namespace Yk::Core
     {
         const auto tagLength{ Helpers::StrLen( tag ) };
 
-        if( m_Length + tagLength < m_Capacity )
-        {
-            memcpy( m_Buf + m_Length, tag, tagLength * sizeof( char16_t ));
-            m_Length += tagLength;
-            m_Buf[ m_Length ] = u'\0';
-        }
-        else
-        {
-            Reserve( m_Length + tagLength );
+        Reserve( m_Length + tagLength );
 
-            memcpy( m_Buf + m_Length, tag, tagLength * sizeof( char16_t ) );
-            m_Length += tagLength;
-            m_Buf[ m_Length ] = u'\0';
-        }
+        memcpy( m_Buf + m_Length, tag, tagLength * sizeof( char16_t ) );
+        m_Length += tagLength;
+        m_Buf[ m_Length ] = u'\0';
 
         m_MultiByteCache.m_Dirty = true;
 
@@ -274,19 +265,19 @@ namespace Yk::Core
 
         const auto tagLen{ Helpers::StrLen( tag ) };
 
+        if( tagLen + pos > m_Length )
+            return UString::NPOS;
+
         auto p{ m_Buf + pos };
-        while( *p )
-        {
-            if( tagLen > ( m_Length - ( p - m_Buf )))
-                break;
+        uint64_t count{ static_cast<uint64_t>( m_Buf + m_Length - p ) - tagLen + 1 };
 
-            if( memcmp( p, tag, tagLen * sizeof( char16_t ) ) == 0 )
-                return static_cast<uint64_t>( p - m_Buf );
+        bool found = false;
+        while( count-- && !found )
+            found = memcmp( p++, tag, tagLen * sizeof( char16_t ) ) == 0;
 
-            ++p;
-        }
-
-        return UString::NPOS;
+        return found
+            ? static_cast<uint64_t>( p - m_Buf - 1 ) // 'p' is ahead by one
+            : UString::NPOS;
     }
 
     uint64_t UString::FindLastOf( const char16_t * tag, uint64_t pos ) const
@@ -296,17 +287,19 @@ namespace Yk::Core
 
         const auto tagLen{ Helpers::StrLen( tag ) };
 
+        if( tagLen > m_Length )
+            return UString::NPOS;
+
         auto p{ m_Buf + std::min( pos, m_Length - tagLen ) };
-        uint64_t count{ static_cast<uint64_t>( p - m_Buf ) };
-        while( count )
-        {
-            if( memcmp( p--, tag, tagLen * sizeof( char16_t ) ) == 0 )
-                return count;
+        uint64_t count{ static_cast<uint64_t>( p - m_Buf ) + 1 };
+        
+        bool found = false;
+        while( count-- && !found )
+            found = memcmp( p--, tag, tagLen * sizeof( char16_t ) ) == 0;
 
-            --count;
-        }
-
-        return UString::NPOS;
+        return found
+            ? static_cast<uint64_t>( p - m_Buf + 1 ) // 'p' is behind by one
+            : UString::NPOS;
     }
 
     UString UString::SubStr( uint64_t pos, uint64_t length ) const
@@ -337,27 +330,21 @@ namespace Yk::Core
         if( length == m_Length && ( m_Length + 1 ) == m_Capacity )
             return;
 
-        if( length > m_Length )
-        {
-            Reserve( length );
-
-            auto p{ m_Buf + m_Length };
-            auto count = length - m_Length;
-            while( count-- )
-                *p++ = c;
-        }
-        else
-        {
-            m_Capacity = length + 1; // +1 for '\0'
-            auto buf{ new char16_t[ m_Capacity ] };
-            memcpy( buf, m_Buf, length * sizeof( char16_t ) );
-            buf[ length ] = u'\0';
-
-            delete[] m_Buf;
-            m_Buf = buf;
-        }
-
+        m_Capacity = length + 1; // +1 for '\0'
+        auto buf{ new char16_t[ m_Capacity ] };
+        memcpy( buf, m_Buf, std::min( m_Length, length ) * sizeof( char16_t ) );
+            
+        auto p{ buf + m_Length };
+        auto count = ( length > m_Length ) ? length - m_Length : 0;
+        while( count-- )
+            *p++ = c;
+            
         m_Length = length;
+        buf[ m_Length ] = u'\0';
+
+        delete[] m_Buf;
+        m_Buf = buf;
+
         m_MultiByteCache.m_Dirty = true;
     }
 }

@@ -166,6 +166,7 @@ namespace Yk::Core::Tests
     {
         auto tag0 = TEXT( "Hello \u2665 World" );
         auto tag1 = TEXT( "\u2665 Wor" );
+        auto tag2 = TEXT( "Hello \u2665 World 123" );
 
         const UString str{ tag0 };
         EXPECT_EQ( 6, str.Find( tag1 ) );
@@ -174,18 +175,36 @@ namespace Yk::Core::Tests
         EXPECT_EQ( 6, str.Find( tag1, 6 ) );
         EXPECT_EQ( UString::NPOS, str.Find( tag1, 7 ) );
         EXPECT_EQ( UString::NPOS, str.Find( tag1, str.Length() ) );
+
+        EXPECT_EQ( 0, str.Find( tag0 ));
+        EXPECT_EQ( 0, str.Find( tag0, 0 ));
+        EXPECT_EQ( UString::NPOS, str.Find( tag0, 1 ));
+        EXPECT_EQ( UString::NPOS, str.Find( tag0, 5 ));
+
+        EXPECT_EQ( UString::NPOS, str.Find( tag2 ));
+        EXPECT_EQ( UString::NPOS, str.Find( tag2, str.Length() ));
     }
 
     TEST( UStringTests, CanFindLastOf )
     {
         auto tag0 = TEXT( "Hello \u2665 World" );
-        auto tag1 = TEXT( "ld" );
+        auto tag1 = TEXT( "\u2665 Wor" );
+        auto tag2 = TEXT( "Hello \u2665 World 123" );
 
         const UString str{ tag0 };
-        EXPECT_EQ( 11, str.FindLastOf( tag1 ));
-        EXPECT_EQ( 11, str.FindLastOf( tag1, str.Length() ) );
-        EXPECT_EQ( 11, str.FindLastOf( tag1, 11 ) );
-        EXPECT_EQ( UString::NPOS, str.FindLastOf( tag1, 10 ) );
+        EXPECT_EQ( 6, str.FindLastOf( tag1 ));
+        EXPECT_EQ( 6, str.FindLastOf( UString{ tag1 } ));
+        EXPECT_EQ( 6, str.FindLastOf( tag1, str.Length() ) );
+        EXPECT_EQ( 6, str.FindLastOf( tag1, 6 ) );
+        EXPECT_EQ( UString::NPOS, str.FindLastOf( tag1, 5 ) );
+
+        EXPECT_EQ( 0, str.FindLastOf( tag0 ));
+        EXPECT_EQ( 0, str.FindLastOf( tag0, 0 ));
+        EXPECT_EQ( 0, str.FindLastOf( tag0, 5 ));
+        EXPECT_EQ( UString::NPOS, str.FindLastOf( tag0, str.Length() + 1 ));
+
+        EXPECT_EQ( UString::NPOS, str.FindLastOf( tag2 ));
+        EXPECT_EQ( UString::NPOS, str.FindLastOf( tag2, 0 ));
     }
 
     TEST( UStringTests, ContainsCorrectlyWorks )
