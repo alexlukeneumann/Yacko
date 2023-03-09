@@ -280,6 +280,7 @@ namespace Yk::Core::Tests
 
         str.Resize( 20, 't' );
         EXPECT_EQ( UString{ TEXT( "Hello \u2665 Worldttttttt" ) }, str );
+        EXPECT_EQ( 0, memcmp( "Hello ♥ Worldttttttt", str.ToMultiByte(), 23 ) );
 
         str.Resize( 13 );
         EXPECT_EQ( UString{ tag0 }, str );
@@ -289,5 +290,6 @@ namespace Yk::Core::Tests
 
         str.Resize( 10 );
         EXPECT_EQ( 0, memcmp( TEXT( "Hello\0\0\0\0\0" ), str.CStr(), str.Length() ) );
+        EXPECT_EQ( 0, memcmp( "Hello\0", str.ToMultiByte(), 6 ) );
     }
 }
