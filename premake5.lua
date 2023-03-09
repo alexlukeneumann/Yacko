@@ -56,4 +56,5 @@ workspace "Yacko"
         symbols "off"
 
 include "Engine"
+include "EngineTests"
 include "Runtime"
