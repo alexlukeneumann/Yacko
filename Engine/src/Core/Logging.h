@@ -35,6 +35,8 @@ namespace Yk::Core::Internal
         static constexpr void LogMessage( Type type, Level level, Args &&... args );
 
     private:
+        static bool s_Initialized;
+
         static std::shared_ptr<spdlog::logger> s_EngineLogger;
         static std::shared_ptr<spdlog::logger> s_EditorLogger;
         static std::shared_ptr<spdlog::logger> s_ClientLogger;
@@ -43,6 +45,9 @@ namespace Yk::Core::Internal
     template <typename... Args>
     constexpr void Logger::LogMessage( Type type, Logger::Level level, Args &&... args )
     {
+        if( !s_Initialized )
+            return;
+
         std::shared_ptr<spdlog::logger> logger = nullptr;
 
         switch( type )

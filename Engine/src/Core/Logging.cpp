@@ -9,12 +9,17 @@
 
 namespace Yk::Core::Internal
 {
+    bool Logger::s_Initialized{ false };
+
     std::shared_ptr<spdlog::logger> Logger::s_EngineLogger;
     std::shared_ptr<spdlog::logger> Logger::s_EditorLogger;
     std::shared_ptr<spdlog::logger> Logger::s_ClientLogger;
 
     void Logger::Init()
     {
+        if( s_Initialized )
+            return;
+
         // Engine Logger
 
         std::vector<spdlog::sink_ptr> engineSinks = {
@@ -78,6 +83,9 @@ namespace Yk::Core::Internal
 
     void Logger::Shutdown()
     {
+        if( !s_Initialized )
+            return;
+
         s_EngineLogger->flush();
         s_EditorLogger->flush();
         s_ClientLogger->flush();
@@ -87,6 +95,8 @@ namespace Yk::Core::Internal
         s_ClientLogger = nullptr;
 
         spdlog::drop_all();
+
+        s_Initialized = false;
     }
 }
 
