@@ -1,5 +1,7 @@
 # include "Core/Logging.h"
 
+# include <cstdint>
+
 namespace Yk
 {
     uint32_t Main( uint32_t argc, char ** argv )
@@ -17,7 +19,7 @@ namespace Yk
 
 int WINAPI WinMain( HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow )
 {
-    return (int)Yk::Main( __argc, __argv );
+    return static_cast<uint32_t>( Yk::Main( __argc, __argv ) );
 }
 
 # else
@@ -33,7 +35,7 @@ int WINAPI WinMain( HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmds
 
 int main( int argc, char ** argv )
 {
-    return (int)Yk::Main( argc, argv );
+    return static_cast<uint32_t>( Yk::Main( argc, argv ) );
 }
 
 # else

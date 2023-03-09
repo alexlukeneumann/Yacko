@@ -1,5 +1,7 @@
 # pragma once
 
+# include "Core/Assert.h"
+
 # include <cstdint>
 # include <string>
 
@@ -128,6 +130,7 @@ namespace Yk::Core
 
     constexpr const char16_t & UString::operator [] ( uint64_t pos ) const
     {
+        YK_ENGINE_VERIFY( pos < m_Length, "pos is out of range!" );
         return *( m_Buf + pos );
     }
 

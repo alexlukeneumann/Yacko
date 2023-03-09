@@ -7,7 +7,7 @@
 
 # define YK_HAS_CONSOLE !defined( YK_DIST )
 
-namespace Yk::Core
+namespace Yk::Core::Internal
 {
     std::shared_ptr<spdlog::logger> Logger::s_EngineLogger;
     std::shared_ptr<spdlog::logger> Logger::s_EditorLogger;

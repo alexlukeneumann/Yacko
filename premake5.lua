@@ -33,7 +33,8 @@ workspace "Yacko"
         defines
         {
             "YK_DEBUG",
-            "YK_LOGGING"
+            "YK_LOGGING",
+            "YK_ASSERTS"
         }
         optimize "off"
         symbols "on"
@@ -42,7 +43,8 @@ workspace "Yacko"
         defines
         {
             "YK_RELEASE",
-            "YK_LOGGING"
+            "YK_LOGGING",
+            "YK_ASSERTS"
         }
         optimize "on"
         symbols "on"
