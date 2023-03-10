@@ -1,7 +1,5 @@
 # pragma once
 
-# include "Core/Assert.h"
-
 # include <cstdint>
 # include <string>
 
@@ -19,9 +17,9 @@ namespace Yk::Core
         static constexpr uint64_t NPOS = ~( 0llu );
 
     public:
-        constexpr UString::UString() = default;
+        UString::UString() = default;
         UString( const UString & other );
-        constexpr UString( UString && other );
+        UString( UString && other );
         UString( const char16_t * tag );
         UString( const char16_t * tag, uint64_t length );
         UString( const std::string_view & tag );
@@ -31,13 +29,13 @@ namespace Yk::Core
         ~UString();
 
         UString & operator = ( const UString & other );
-        constexpr UString & operator = ( UString && other );
+        UString & operator = ( UString && other );
 
-        constexpr const char16_t * CStr() const { return m_Buf; }
-        constexpr operator const char16_t * () { return CStr(); }
+        const char16_t * CStr() const { return m_Buf; }
+        operator const char16_t * () { return CStr(); }
 
-        constexpr uint64_t Length() const { return m_Length; }
-        constexpr uint64_t Capacity() const { return m_Capacity; }
+        uint64_t Length() const { return m_Length; }
+        uint64_t Capacity() const { return m_Capacity; }
 
         const char * ToMultiByte() const;
         inline operator const char * () const { return ToMultiByte(); }
@@ -58,9 +56,9 @@ namespace Yk::Core
         void Resize( uint64_t length, char16_t c = '\0' );
 
         inline bool Contains( const char16_t * tag, uint64_t pos = 0 ) const { return Find( tag, pos ) != UString::NPOS; }
-        constexpr bool Empty() const { return m_Length == 0; }
+        bool Empty() const { return m_Length == 0; }
 
-        constexpr const char16_t & operator [] ( uint64_t pos ) const;
+        const char16_t & operator [] ( uint64_t pos ) const;
 
     private:
         char16_t * m_Buf{ nullptr };
@@ -72,70 +70,14 @@ namespace Yk::Core
             char * m_Buf{ nullptr };
             bool m_Dirty{ false };
 
-            constexpr MultiByteCache() = default;
+            MultiByteCache() = default;
             MultiByteCache( const MultiByteCache & ) = delete;
-            constexpr MultiByteCache( MultiByteCache && other );
+            MultiByteCache( MultiByteCache && other );
 
-            constexpr MultiByteCache & operator = ( MultiByteCache && other );
+            MultiByteCache & operator = ( MultiByteCache && other );
         };
         mutable MultiByteCache m_MultiByteCache;
     };
-
-    constexpr UString::UString( UString && other )
-        : m_Buf{ other.m_Buf }
-        , m_Length{ other.m_Length }
-        , m_Capacity{ other.m_Capacity }
-        , m_MultiByteCache{ std::move( other.m_MultiByteCache ) }
-    {
-        other.m_Buf = nullptr;
-        other.m_Length = 0;
-        other.m_Capacity = 0;
-    }
-
-    constexpr UString & UString::operator = ( UString && other )
-    {
-        if( m_Buf )
-            delete[] m_Buf;
-
-        m_Buf = other.m_Buf;
-        m_Length = other.m_Length;
-        m_Capacity = other.m_Capacity;
-        m_MultiByteCache = std::move( other.m_MultiByteCache );
-
-        other.m_Buf = nullptr;
-        other.m_Length = 0;
-        other.m_Capacity = 0;
-
-        return *this;
-    }
-
-    constexpr UString::MultiByteCache::MultiByteCache( MultiByteCache && other )
-        : m_Buf{ other.m_Buf }
-        , m_Dirty{ other.m_Dirty }
-    {
-        other.m_Buf = nullptr;
-        other.m_Dirty = false;
-    }
-
-    constexpr UString::MultiByteCache & UString::MultiByteCache::operator = ( MultiByteCache && other )
-    {
-        if( m_Buf )
-            delete[] m_Buf;
-
-        m_Buf = other.m_Buf;
-        m_Dirty = other.m_Dirty;
-
-        other.m_Buf = nullptr;
-        other.m_Dirty = false;
-
-        return *this;
-    }
-
-    constexpr const char16_t & UString::operator [] ( uint64_t pos ) const
-    {
-        YK_ENGINE_VERIFY( pos < m_Length, "pos is out of range!" );
-        return *( m_Buf + pos );
-    }
 
 # define YK_TXT( tag ) u##tag
 

@@ -32,7 +32,7 @@ namespace Yk::Core::Internal
         static void Shutdown();
 
         template <typename... Args>
-        static constexpr void LogMessage( Type type, Level level, Args &&... args );
+        static void LogMessage( Type type, Level level, Args &&... args );
 
     private:
         static bool s_Initialized;
@@ -43,7 +43,7 @@ namespace Yk::Core::Internal
     };
 
     template <typename... Args>
-    constexpr void Logger::LogMessage( Type type, Logger::Level level, Args &&... args )
+    void Logger::LogMessage( Type type, Logger::Level level, Args &&... args )
     {
         if( !s_Initialized )
             return;

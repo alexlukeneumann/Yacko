@@ -9,7 +9,7 @@
 namespace Yk::Core::Internal
 {
     template <typename... Args>
-    constexpr void HandleEngineAssert(
+    void HandleEngineAssert(
         bool assert,
         const char * conditionStr,
         uint32_t lineNumber,
@@ -37,7 +37,7 @@ namespace Yk::Core::Internal
     }
 
     template <typename... Args>
-    constexpr void HandleEngineVerify(
+    void HandleEngineVerify(
         bool verify,
         const char * conditionStr,
         uint32_t lineNumber,

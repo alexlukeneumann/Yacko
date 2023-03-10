@@ -1,3 +1,4 @@
+# include "Core/Assert.h"
 # include "Core/Logging.h"
 # include "Core/UString.h"
 

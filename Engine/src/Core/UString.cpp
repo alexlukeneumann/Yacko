@@ -1,5 +1,7 @@
 # include "UString.h"
 
+# include "Core/Assert.h"
+
 # include <uchar.h>
 
 namespace Yk::Core
@@ -95,6 +97,28 @@ namespace Yk::Core
         }
     }
 
+    UString::MultiByteCache::MultiByteCache( MultiByteCache && other )
+        : m_Buf{ other.m_Buf }
+        , m_Dirty{ other.m_Dirty }
+    {
+        other.m_Buf = nullptr;
+        other.m_Dirty = false;
+    }
+
+    UString::MultiByteCache & UString::MultiByteCache::operator = ( MultiByteCache && other )
+    {
+        if( m_Buf )
+            delete[] m_Buf;
+
+        m_Buf = other.m_Buf;
+        m_Dirty = other.m_Dirty;
+
+        other.m_Buf = nullptr;
+        other.m_Dirty = false;
+
+        return *this;
+    }
+
     UString::UString( const UString & other )
         : m_Buf{ nullptr }
         , m_Length{ other.m_Length }
@@ -106,6 +130,17 @@ namespace Yk::Core
             m_Buf = new char16_t[ m_Capacity ];
             memcpy( m_Buf, other.m_Buf, m_Capacity * sizeof( char16_t ) );
         }
+    }
+
+    UString::UString( UString && other )
+        : m_Buf{ other.m_Buf }
+        , m_Length{ other.m_Length }
+        , m_Capacity{ other.m_Capacity }
+        , m_MultiByteCache{ std::move( other.m_MultiByteCache ) }
+    {
+        other.m_Buf = nullptr;
+        other.m_Length = 0;
+        other.m_Capacity = 0;
     }
 
     UString::UString( const char16_t * tag )
@@ -202,6 +237,23 @@ namespace Yk::Core
             m_Buf = new char16_t[ m_Capacity ];
             memcpy( m_Buf, other.m_Buf, m_Capacity * sizeof( char16_t ) );
         }
+
+        return *this;
+    }
+
+    UString & UString::operator = ( UString && other )
+    {
+        if( m_Buf )
+            delete[] m_Buf;
+
+        m_Buf = other.m_Buf;
+        m_Length = other.m_Length;
+        m_Capacity = other.m_Capacity;
+        m_MultiByteCache = std::move( other.m_MultiByteCache );
+
+        other.m_Buf = nullptr;
+        other.m_Length = 0;
+        other.m_Capacity = 0;
 
         return *this;
     }
@@ -368,5 +420,11 @@ namespace Yk::Core
         m_Buf = buf;
 
         m_MultiByteCache.m_Dirty = true;
+    }
+
+    const char16_t & UString::operator [] ( uint64_t pos ) const
+    {
+        YK_ENGINE_VERIFY( pos < m_Length, "pos is out of range!" );
+        return *( m_Buf + pos );
     }
 }
